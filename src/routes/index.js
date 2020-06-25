@@ -2,6 +2,7 @@ import express from "express";
 import User from "../controllers/User";
 import UserAccountBank from "../controllers/UserAccountBank";
 import UserAddress from "../controllers/UserAddress";
+import Donations from "../controllers/Donations";
 import Password from "../controllers/Password";
 import Session from "../controllers/Session";
 import authMiddleware from "../middlewares/authMiddleware";
@@ -29,5 +30,11 @@ router.get("/user/address/:id", authMiddleware, UserAddress.view);
 router.post("/user/address", authMiddleware, UserAddress.create);
 
 router.put("/user/address/:id", authMiddleware, UserAddress.update);
+
+router.post("/donations", authMiddleware, Donations.create);
+
+router.patch("/donations/:id/:status", authMiddleware, Donations.update);
+
+router.get("/donations/:status", authMiddleware, Donations.view);
 
 export default router;

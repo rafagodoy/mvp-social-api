@@ -2,7 +2,6 @@ import { userAddressSchema } from "../validations/usersAddress";
 import validateSchema from "../validations/validateSchema";
 import throwError from "../helpers/throwError";
 import usersAddress from "../models/users_address";
-import { Op } from "../config/sequelize";
 
 class UserAccountBank {
     async create(req, res, next) {

@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { Sequelize, DataTypes, Model } from "sequelize";
 
 const Op = Sequelize.Op;
 
@@ -17,4 +17,4 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     },
 });
 
-export { sequelize, DataTypes, Op };
+export { sequelize, Model, DataTypes, Op };
