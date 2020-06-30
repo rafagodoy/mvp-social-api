@@ -4,7 +4,7 @@ import validateSchema from "../validations/validateSchema";
 import throwError from "../helpers/throwError";
 import users from "../models/users";
 
-class Password {
+class Passwords {
     async update(req, res, next) {
         try {
             const { hasErrorValidation, error } = await validateSchema(req.body, updatePasswordSchema, next);
@@ -29,4 +29,4 @@ class Password {
     }
 }
 
-export default new Password();
+export default new Passwords();
