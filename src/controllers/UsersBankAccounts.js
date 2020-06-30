@@ -1,16 +1,20 @@
 import { userAccountSchema } from "../validations/usersAccountBank";
 import validateSchema from "../validations/validateSchema";
 import throwError from "../helpers/throwError";
-import usersAccount from "../models/users_account_bank";
+import usersBankAccounts from "../models/users_bank_accounts";
 import { Op } from "../config/sequelize";
 
-class UserAccountBank {
+class UsersBankAccounts {
     async create(req, res, next) {
         try {
             const { hasErrorValidation, error } = await validateSchema(req.body, userAccountSchema, next);
 
             if (hasErrorValidation) {
                 return throwError(400, error, next);
+            }
+
+            if (parseInt(req.params.idUsers) !== parseInt(req.headers.id_user)) {
+                return throwError(403, "You dont't have permission for change this account bank", next);
             }
 
             req.body = {
@@ -21,7 +25,7 @@ class UserAccountBank {
             };
 
             if (
-                await usersAccount.findOne({
+                await usersBankAccounts.findOne({
                     where: {
                         [Op.or]: [{ cpf: req.body.cpf }, { id_users: req.body.id_users }],
                     },
@@ -31,7 +35,7 @@ class UserAccountBank {
             }
 
             if (
-                await usersAccount.findOne({
+                await usersBankAccounts.findOne({
                     where: {
                         [Op.and]: [{ agency: req.body.agency }, { account: req.body.account }],
                     },
@@ -40,9 +44,9 @@ class UserAccountBank {
                 return throwError(403, "The account bank exists in database", next);
             }
 
-            const newUserAccount = await usersAccount.create(req.body);
+            const userBankAccount = await usersBankAccounts.create(req.body);
 
-            res.status(200).json({ status: "true", message: newUserAccount });
+            res.status(200).json({ status: "true", userBankAccount });
         } catch (error) {
             throwError(500, error, next);
         }
@@ -50,17 +54,26 @@ class UserAccountBank {
 
     async view(req, res, next) {
         try {
-            if (
-                !(await usersAccount.findOne({
-                    where: { id_users: parseInt(req.headers.id_user), id_users_account_bank: parseInt(req.params.id) },
-                }))
-            ) {
-                return throwError(403, "Error to request information", next);
+            if (parseInt(req.params.idUsers) !== parseInt(req.headers.id_user)) {
+                return throwError(403, "You dont't have permission for view this bank account", next);
             }
 
-            const user = await usersAccount.findOne({ where: { id_users_account_bank: parseInt(req.params.id) } });
+            if (
+                !(await usersBankAccounts.findOne({
+                    where: {
+                        id_users: parseInt(req.params.idUsers),
+                        id_users_bank_accounts: parseInt(req.params.idBankAccounts),
+                    },
+                }))
+            ) {
+                return throwError(403, "You dont't have permission for view this bank account", next);
+            }
 
-            res.status(200).json({ status: "true", msg: user });
+            const userBankAccount = await usersBankAccounts.findOne({
+                where: { id_users_bank_accounts: parseInt(req.params.idBankAccounts) },
+            });
+
+            res.status(200).json({ status: "true", userBankAccount });
         } catch (error) {
             throwError(500, error, next);
         }
@@ -74,12 +87,19 @@ class UserAccountBank {
                 return throwError(400, error, next);
             }
 
+            if (parseInt(req.params.idUsers) !== parseInt(req.headers.id_user)) {
+                return throwError(403, "You dont't have permission for view this bank account", next);
+            }
+
             if (
-                !(await usersAccount.findOne({
-                    where: { id_users: parseInt(req.headers.id_user), id_users_account_bank: parseInt(req.params.id) },
+                !(await usersBankAccounts.findOne({
+                    where: {
+                        id_users: parseInt(req.params.idUsers),
+                        id_users_bank_accounts: parseInt(req.params.idBankAccounts),
+                    },
                 }))
             ) {
-                return throwError(403, "Error to request information", next);
+                return throwError(403, "You dont't have permission for view this bank account", next);
             }
 
             req.body = {
@@ -90,7 +110,7 @@ class UserAccountBank {
             };
 
             if (
-                await usersAccount.findOne({
+                await usersBankAccounts.findOne({
                     where: {
                         [Op.or]: [
                             {
@@ -112,7 +132,7 @@ class UserAccountBank {
                 return throwError(403, "The account bank exists in database", next);
             }
 
-            await usersAccount.update(req.body, { where: { id_users: parseInt(req.headers.id_user) } });
+            await usersBankAccounts.update(req.body, { where: { id_users: parseInt(req.headers.id_user) } });
 
             res.status(200).json({ status: "true", message: "User update successfully" });
         } catch (error) {
@@ -121,4 +141,4 @@ class UserAccountBank {
     }
 }
 
-export default new UserAccountBank();
+export default new UsersBankAccounts();

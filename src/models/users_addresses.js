@@ -1,10 +1,10 @@
 import { sequelize, DataTypes, Model } from "../config/sequelize";
 
-class users_address extends Model {}
+class users_addresses extends Model {}
 
-users_address.init(
+users_addresses.init(
     {
-        id_users_address: {
+        id_users_addresses: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
@@ -38,7 +38,7 @@ users_address.init(
             type: DataTypes.STRING(10),
         },
     },
-    { sequelize, tableName: "users_address" }
+    { sequelize, tableName: "users_addresses" }
 );
 
-export default users_address;
+export default users_addresses;

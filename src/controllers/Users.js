@@ -5,7 +5,7 @@ import throwError from "../helpers/throwError";
 import users from "../models/users";
 import { Op } from "../config/sequelize";
 
-class User {
+class Users {
     async create(req, res, next) {
         try {
             const { hasErrorValidation, error } = await validateSchema(req.body, registerUserSchema, next);
@@ -18,9 +18,9 @@ class User {
                 return throwError(403, "Email exists in database", next);
             }
 
-            const newUser = await users.create({ ...req.body, password: md5(req.body.password) });
+            const user = await users.create({ ...req.body, password: md5(req.body.password) });
 
-            res.status(200).json({ status: "true", message: newUser });
+            res.status(200).json({ status: "true", user });
         } catch (error) {
             throwError(500, error, next);
         }
@@ -34,7 +34,7 @@ class User {
 
             const user = await users.findOne({ where: { id_users: req.headers.id_user } });
 
-            res.status(200).json({ status: "true", msg: user });
+            res.status(200).json({ status: "true", user });
         } catch (error) {
             throwError(500, error, next);
         }
@@ -46,6 +46,10 @@ class User {
 
             if (hasErrorValidation) {
                 return throwError(400, error, next);
+            }
+
+            if (parseInt(req.params.id) !== parseInt(req.headers.id_user)) {
+                return throwError(403, "Error to request information", next);
             }
 
             if (
@@ -67,4 +71,4 @@ class User {
     }
 }
 
-export default new User();
+export default new Users();

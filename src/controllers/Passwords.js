@@ -13,6 +13,10 @@ class Password {
                 return throwError(400, error, next);
             }
 
+            if (parseInt(req.params.id) !== parseInt(req.headers.id_user)) {
+                return throwError(403, "You dont't have permission for change this password", next);
+            }
+
             await users.update(
                 { password: md5(req.body.password) },
                 { where: { id_users: parseInt(req.headers.id_user) } }

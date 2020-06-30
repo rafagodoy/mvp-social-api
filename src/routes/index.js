@@ -1,40 +1,40 @@
 import express from "express";
-import User from "../controllers/User";
-import UserAccountBank from "../controllers/UserAccountBank";
-import UserAddress from "../controllers/UserAddress";
+import Users from "../controllers/Users";
+import UsersBankAccounts from "../controllers/UsersBankAccounts";
+import UsersAddresses from "../controllers/UsersAddresses";
 import Donations from "../controllers/Donations";
-import Password from "../controllers/Password";
+import Passwords from "../controllers/Passwords";
 import Session from "../controllers/Session";
 import authMiddleware from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
-router.post("/register", User.create);
+router.post("/users", Users.create);
 
-router.post("/session", Session.create);
+router.put("/users/:id", authMiddleware, Users.update);
 
-router.put("/user/update", authMiddleware, User.update);
+router.get("/users/:id", authMiddleware, Users.view);
 
-router.patch("/password/change", authMiddleware, Password.update);
+router.patch("/users/:id/password-change", authMiddleware, Passwords.update);
 
-router.get("/user/:id", authMiddleware, User.view);
+router.post("/users/sessions", Session.create);
 
-router.get("/user/accountbank/:id", authMiddleware, UserAccountBank.view);
+router.post("/users/:idUsers/bank-accounts", authMiddleware, UsersBankAccounts.create);
 
-router.post("/user/accountbank", authMiddleware, UserAccountBank.create);
+router.put("/users/:idUsers/bank-accounts/:idBankAccounts", authMiddleware, UsersBankAccounts.update);
 
-router.put("/user/accountbank/:id", authMiddleware, UserAccountBank.update);
+router.get("/users/:idUsers/bank-accounts/:idBankAccounts", authMiddleware, UsersBankAccounts.view);
 
-router.get("/user/address/:id", authMiddleware, UserAddress.view);
+router.post("/users/:idUsers/addresses", authMiddleware, UsersAddresses.create);
 
-router.post("/user/address", authMiddleware, UserAddress.create);
+router.put("/users/:idUsers/addresses/:idUsersAddresses", authMiddleware, UsersAddresses.update);
 
-router.put("/user/address/:id", authMiddleware, UserAddress.update);
+router.get("/users/:idUsers/addresses/:idUsersAddresses", authMiddleware, UsersAddresses.view);
 
-router.post("/donations", authMiddleware, Donations.create);
+router.post("/users/:id/donations", authMiddleware, Donations.create);
 
-router.patch("/donations/:id/:status", authMiddleware, Donations.update);
+router.get("/users/:id/donations", authMiddleware, Donations.view);
 
-router.get("/donations/:status", authMiddleware, Donations.view);
+router.patch("/donations/:id", authMiddleware, Donations.update);
 
 export default router;
