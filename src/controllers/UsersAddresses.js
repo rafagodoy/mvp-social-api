@@ -21,7 +21,7 @@ class UsersAddresses {
                 id_users: parseInt(req.headers.id_user),
             };
 
-            if (await usersAddresses.findOne({ where: { id_users: req.body.id_users } })) {
+            if (await usersAddresses.findOne({ where: { id_users: parseInt(req.body.id_users) } })) {
                 return throwError(403, "This user has a address registered", next);
             }
 
