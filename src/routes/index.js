@@ -4,6 +4,7 @@ import UsersBankAccounts from "../controllers/UsersBankAccounts";
 import UsersAddresses from "../controllers/UsersAddresses";
 import Donations from "../controllers/Donations";
 import Acknowledgments from "../controllers/Acknowledgments";
+import Cashier from "../controllers/Cashier";
 import Passwords from "../controllers/Passwords";
 import Session from "../controllers/Session";
 import authMiddleware from "../middlewares/authMiddleware";
@@ -39,5 +40,7 @@ router.get("/users/:id/donations/:status", authMiddleware, Donations.view);
 router.patch("/donations/:id/:status", authMiddleware, Donations.update);
 
 router.patch("/users/:idUsers/donations/:idDonations/to-thank", authMiddleware, Acknowledgments.update);
+
+router.put("/users/:id/donations/transfer-money", authMiddleware, Cashier.update);
 
 export default router;
