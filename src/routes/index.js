@@ -1,5 +1,6 @@
 import express from "express";
 import Users from "../controllers/Users";
+import Beneficents from "../controllers/Beneficents";
 import UsersBankAccounts from "../controllers/UsersBankAccounts";
 import UsersAddresses from "../controllers/UsersAddresses";
 import Donations from "../controllers/Donations";
@@ -10,6 +11,8 @@ import Session from "../controllers/Session";
 import authMiddleware from "../middlewares/authMiddleware";
 
 const router = express.Router();
+
+router.get("/users/beneficents", authMiddleware, Beneficents.index);
 
 router.post("/users", Users.create);
 

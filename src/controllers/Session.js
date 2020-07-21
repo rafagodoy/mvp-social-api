@@ -10,7 +10,9 @@ class Session {
         try {
             await validateSchema(req.body, sessionUserSchema, next);
 
-            const user = await users.findOne({ where: { email: req.body.email, password: md5(req.body.password) } });
+            const user = await users.findOne({
+                where: { email: req.body.email, password: md5(req.body.password), status: "active" },
+            });
 
             if (!user) {
                 return throwError(401, "Email or password is wrong", next);

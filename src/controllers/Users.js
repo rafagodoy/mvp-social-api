@@ -18,7 +18,7 @@ class Users {
                 return throwError(403, "Email exists in database", next);
             }
 
-            const user = await users.create({ ...req.body, password: md5(req.body.password) });
+            const user = await users.create({ ...req.body, password: md5(req.body.password), status: "active" });
 
             res.status(200).json({ status: "true", user });
         } catch (error) {
