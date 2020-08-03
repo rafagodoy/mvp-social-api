@@ -1,8 +1,4 @@
-import { sessionUserSchema } from "../validations/users";
-import multer from "multer";
-import validateSchema from "../validations/validateSchema";
 import throwError from "../helpers/throwError";
-import upload from "../utils/Files";
 import users from "../models/users";
 
 class Avatars {
