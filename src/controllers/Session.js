@@ -1,4 +1,4 @@
-import md5 from "md5";
+import CryptoJS from "crypto-js";
 import { sessionUserSchema } from "../validations/users";
 import validateSchema from "../validations/validateSchema";
 import throwError from "../helpers/throwError";
@@ -11,10 +11,20 @@ class Session {
             await validateSchema(req.body, sessionUserSchema, next);
 
             const user = await users.findOne({
-                where: { email: req.body.email, password: md5(req.body.password), status: "active" },
+                where: {
+                    email: req.body.email,
+                    status: "active",
+                },
             });
 
             if (!user) {
+                return throwError(401, "Email or password is wrong", next);
+            }
+
+            var bytes = CryptoJS.AES.decrypt(user.password, process.env.CRYPTO_SECRET);
+            var decryptPassword = bytes.toString(CryptoJS.enc.Utf8);
+
+            if (decryptPassword !== req.body.password) {
                 return throwError(401, "Email or password is wrong", next);
             }
 

@@ -1,4 +1,4 @@
-import md5 from "md5";
+import CryptoJs from "crypto-js";
 import { registerUserSchema, updateUserSchema } from "../validations/users";
 import validateSchema from "../validations/validateSchema";
 import throwError from "../helpers/throwError";
@@ -18,7 +18,11 @@ class Users {
                 return throwError(403, "Email exists in database", next);
             }
 
-            const user = await users.create({ ...req.body, password: md5(req.body.password), status: "active" });
+            const user = await users.create({
+                ...req.body,
+                password: CryptoJs.AES.encrypt(req.body.password, process.env.CRYPTO_SECRET).toString(),
+                status: "active",
+            });
 
             res.status(200).json({ status: "true", user });
         } catch (error) {
