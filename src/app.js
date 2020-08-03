@@ -16,6 +16,8 @@ app.disable("x-powered-by");
 // Allowing parsing content as json
 app.use(bodyParser.json());
 
+app.use(express.static('/src/public'));
+
 app.use("/", router);
 
 app.use((err, req, res, next) => {

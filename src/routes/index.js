@@ -1,5 +1,6 @@
 import express from "express";
 import Users from "../controllers/Users";
+import Avatars from "../controllers/Avatars";
 import Beneficents from "../controllers/Beneficents";
 import UsersBankAccounts from "../controllers/UsersBankAccounts";
 import UsersAddresses from "../controllers/UsersAddresses";
@@ -9,10 +10,13 @@ import Cashier from "../controllers/Cashier";
 import Passwords from "../controllers/Passwords";
 import Session from "../controllers/Session";
 import authMiddleware from "../middlewares/authMiddleware";
+import uploadMiddleware from "../middlewares/uploadMiddleware";
 
 const router = express.Router();
 
 router.get("/users/beneficents", authMiddleware, Beneficents.index);
+
+router.post("/users/:id/avatars", authMiddleware, uploadMiddleware, Avatars.update);
 
 router.post("/users", Users.create);
 

@@ -4,7 +4,7 @@ import { Op } from "../config/sequelize";
 
 class Beneficents {
     async index(req, res, next) {
-        console.log("ola");
+       
         try {
             if (
                 !(await users.findOne({
