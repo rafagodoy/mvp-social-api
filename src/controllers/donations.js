@@ -152,7 +152,7 @@ class Donations {
                 return throwError(403, "The donation number has been exists in beneficent cashier", next);
             }
 
-            req.params.status = req.params.status === "accept" ? 2 : req.params.status === "refuse" ? 3 : null;
+            req.route.path.includes("accept") ? 2 : req.route.path.includes("refuse") ? 3 : null;
 
             await donations.update(
                 { id_status_donations: parseInt(req.params.status) },

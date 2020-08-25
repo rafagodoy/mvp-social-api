@@ -44,9 +44,11 @@ router.post("/users/:id/donations", authMiddleware, Donations.create);
 
 router.get("/users/:id/donations/:status", authMiddleware, Donations.view);
 
-router.patch("/donations/:id/:status", authMiddleware, Donations.update);
+router.post("/donations/:id/accept", authMiddleware, Donations.update);
 
-router.patch("/users/:idUsers/donations/:idDonations/to-thank", authMiddleware, Acknowledgments.update);
+router.post("/donations/:id/refuse", authMiddleware, Donations.update);
+
+router.post("/users/:idUsers/donations/:idDonations/to-thank", authMiddleware, Acknowledgments.update);
 
 router.put("/users/:id/donations/transfer-money", authMiddleware, Cashier.update);
 
